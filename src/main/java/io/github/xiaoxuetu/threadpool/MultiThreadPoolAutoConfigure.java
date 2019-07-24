@@ -11,7 +11,6 @@ import org.springframework.core.task.TaskDecorator;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +48,6 @@ public class MultiThreadPoolAutoConfigure {
                 : multiThreadPoolProperties.getProperties().entrySet()) {
             String beanName = entry.getKey();
             MultiThreadPoolProperties.ThreadPoolProperties properties = entry.getValue();
-            log.info("Init threadpool '{}'", beanName);
             ThreadPoolTaskExecutor executor = ManualRegistBeanUtil
                     .registerBean((ConfigurableApplicationContext) applicationContext, beanName, ThreadPoolTaskExecutor.class);
             initExecutorProperties(executor, properties);
@@ -66,16 +64,6 @@ public class MultiThreadPoolAutoConfigure {
         map.from(properties::isAllowCoreThreadTimeout).to(taskExecutor::setAllowCoreThreadTimeOut);
         map.from(properties::getBeanName).whenHasText().to(taskExecutor::setThreadNamePrefix);
         map.from(taskDecorator::getIfUnique).to(taskExecutor::setTaskDecorator);
-    }
-
-    @PreDestroy
-    public void destroy() {
-        if (threadPoolTaskExecutorCache.isEmpty()) {
-            return;
-        }
-
-        threadPoolTaskExecutorCache.forEach((beanName, threadPoolTaskExecutor) -> {
-            threadPoolTaskExecutor.shutdown();
-        });
+        taskExecutor.initialize();
     }
 }

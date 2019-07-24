@@ -46,12 +46,12 @@ public class MultiThreadPoolProperties {
          *
          * 默认值: 30，表示等待任务完成时长为30秒
          */
-        private Duration awaitTerminationSeconds = Duration.ofSeconds(30);
+        private Duration awaitTerminationSeconds = Duration.ofSeconds(30L);
 
         /**
          * 核心线程数
          *
-         * 默认值: 0，表示该线程池最少保留1个线程
+         * 默认值: 1，表示该线程池最少保留1个线程
          */
         private int coreSize = 1;
 
@@ -67,14 +67,14 @@ public class MultiThreadPoolProperties {
          *
          * 默认值: 60，表示线程空转时长为60秒
          */
-        private Duration keepAliveSeconds = Duration.ofSeconds(60);
+        private Duration keepAliveSeconds = Duration.ofSeconds(60L);
 
         /**
          * 当线程空转超过保留时长时，是否允许释放
          *
          * 默认值：true，表示释放
          */
-        private boolean allowCoreThreadTimeout = Boolean.FALSE;
+        private boolean allowCoreThreadTimeout = Boolean.TRUE;
 
         /**
          * 队列最大数量
