@@ -14,6 +14,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.Map;
 
+/**
+ * 线程池自动配置器
+ */
 @Slf4j
 @Configuration
 @EnableConfigurationProperties(MultiThreadPoolProperties.class)
@@ -40,6 +43,12 @@ public class MultiThreadPoolAutoConfigure {
     @Resource
     private MultiThreadPoolManager multiThreadPoolManager;
 
+    /**
+     * 构造方法
+     * @param multiThreadPoolProperties 线程池配置
+     * @param applicationContext        应用上下文
+     * @param taskDecorator             任务修饰器
+     */
     public MultiThreadPoolAutoConfigure(MultiThreadPoolProperties multiThreadPoolProperties,
                                         ApplicationContext applicationContext,
                                         ObjectProvider<TaskDecorator> taskDecorator) {
@@ -48,6 +57,11 @@ public class MultiThreadPoolAutoConfigure {
         this.taskDecorator = taskDecorator;;
     }
 
+    /**
+     * 初始化线程池
+     *
+     * 目前初始化时机是在该类初始化后
+     */
     @PostConstruct
     public void init() {
         for (Map.Entry<String, MultiThreadPoolProperties.ThreadPoolProperties> entry
@@ -61,6 +75,10 @@ public class MultiThreadPoolAutoConfigure {
     }
 
 
+    /**
+     * 获取线程池管理器
+     * @return 线程池管理器
+     */
     @Bean
     @ConditionalOnMissingBean
     public MultiThreadPoolManager multiThreadPoolManager() {

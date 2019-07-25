@@ -21,21 +21,22 @@ public class ManualRegistBeanUtil {
      * @return 返回注册到容器中的bean对象
      */
     public static <T> T registerBean(ConfigurableApplicationContext applicationContext, String name, Class<T> clazz, Object... args) {
+        // bean存在，则直接返回现有的对象
         if (applicationContext.containsBean(name)) {
             Object bean = applicationContext.getBean(name);
             if (bean.getClass().isAssignableFrom(clazz)) {
                 return (T) bean;
             } else {
-                throw new RuntimeException("BeanName 重复 " + name);
+                throw new RuntimeException("Duplicate bean named '" + name + "'.");
             }
         }
 
+        // 定义并注册bean
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
         for (Object arg : args) {
             beanDefinitionBuilder.addConstructorArgValue(arg);
         }
         BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
-
         BeanDefinitionRegistry beanFactory = (BeanDefinitionRegistry) applicationContext.getBeanFactory();
         beanFactory.registerBeanDefinition(name, beanDefinition);
         return applicationContext.getBean(name, clazz);

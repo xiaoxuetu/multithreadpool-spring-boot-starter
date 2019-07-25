@@ -7,6 +7,9 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 线程池配置
+ */
 @Data
 @ConfigurationProperties(prefix = "spring.threadpools")
 public class MultiThreadPoolProperties {

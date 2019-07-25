@@ -8,9 +8,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class DemoTask {
 
-    public static final String TEST_THREAD_POOL_NAME = "xiaoxuetu";
-    public static final String TEST_THREAD_PREFIX = "xiaoxuetu-";
+    /**
+     * 线程池实例名称
+     */
+    static final String TEST_THREAD_POOL_NAME = "xiaoxuetu";
 
+    /**
+     * 线程前缀
+     */
+    static final String TEST_THREAD_PREFIX = "xiaoxuetu-";
+
+    /**
+     * 可以异步执行的任务
+     */
     @Async(TEST_THREAD_POOL_NAME)
     public void printTask() {
         log.info("demo print async");

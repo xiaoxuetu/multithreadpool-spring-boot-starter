@@ -11,9 +11,19 @@ import javax.annotation.PreDestroy;
 import java.time.Duration;
 import java.util.HashMap;
 
+/**
+ * 线程池管理器
+ */
 @Slf4j
 public class MultiThreadPoolManager extends HashMap<String, ThreadPoolTaskExecutor> {
 
+    /**
+     * 创建线程池
+     * @param applicationContext 应用上下文
+     * @param beanName           线程池实例名称，同时也是线程池前缀
+     * @param properties         线程池配置
+     * @param taskDecorator      任务修饰器
+     */
     public void createThreadPoolTaskExecutor(ConfigurableApplicationContext applicationContext,
                                              String beanName,
                                              MultiThreadPoolProperties.ThreadPoolProperties properties,
@@ -29,6 +39,12 @@ public class MultiThreadPoolManager extends HashMap<String, ThreadPoolTaskExecut
         put(beanName, executor);
     }
 
+    /**
+     * 调整线程池配置
+     * @param taskExecutor   线程池
+     * @param properties     线程池配置
+     * @param taskDecorator  任务修饰器
+     */
     private void initExecutorProperties(ThreadPoolTaskExecutor taskExecutor,
                                         MultiThreadPoolProperties.ThreadPoolProperties properties,
                                         TaskDecorator taskDecorator) {
@@ -48,6 +64,9 @@ public class MultiThreadPoolManager extends HashMap<String, ThreadPoolTaskExecut
         taskExecutor.initialize();
     }
 
+    /**
+     * 应用退出时，清空管理器中的缓存
+     */
     @PreDestroy
     public void destroy() {
         log.info("Destroy multi thread pools...");
