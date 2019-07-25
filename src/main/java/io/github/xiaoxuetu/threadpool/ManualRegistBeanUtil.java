@@ -5,6 +5,9 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ConfigurableApplicationContext;
 
+/**
+ * Bean注册工具
+ */
 public class ManualRegistBeanUtil {
 
     /**
@@ -14,7 +17,7 @@ public class ManualRegistBeanUtil {
      * @param name               BeanName
      * @param clazz              注册的bean的类性
      * @param args               构造方法的必要参数，顺序和类型要求和clazz中定义的一致
-     * @param <T>
+     * @param <T>                需要注册的类型
      * @return 返回注册到容器中的bean对象
      */
     public static <T> T registerBean(ConfigurableApplicationContext applicationContext, String name, Class<T> clazz, Object... args) {

@@ -2,17 +2,16 @@ package io.github.xiaoxuetu.threadpool;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskDecorator;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import javax.annotation.PostConstruct;
-import java.time.Duration;
-import java.util.HashMap;
+import javax.annotation.Resource;
 import java.util.Map;
 
 @Slf4j
@@ -21,49 +20,50 @@ import java.util.Map;
 public class MultiThreadPoolAutoConfigure {
 
     /**
-     * 线程池缓存
-     */
-    private Map<String, ThreadPoolTaskExecutor> threadPoolTaskExecutorCache = new HashMap<>();
-
-    /**
-     * 线程池
+     * 线程池属性
      */
     private MultiThreadPoolProperties multiThreadPoolProperties;
 
+    /**
+     * 应用上线文
+     */
     private ApplicationContext applicationContext;
 
+    /**
+     * 任务修饰器
+     */
     private final ObjectProvider<TaskDecorator> taskDecorator;
+
+    /**
+     * 线程池缓存
+     */
+    @Resource
+    private MultiThreadPoolManager multiThreadPoolManager;
 
     public MultiThreadPoolAutoConfigure(MultiThreadPoolProperties multiThreadPoolProperties,
                                         ApplicationContext applicationContext,
                                         ObjectProvider<TaskDecorator> taskDecorator) {
         this.multiThreadPoolProperties = multiThreadPoolProperties;
         this.applicationContext = applicationContext;
-        this.taskDecorator = taskDecorator;
+        this.taskDecorator = taskDecorator;;
     }
 
     @PostConstruct
-    private void init() {
+    public void init() {
         for (Map.Entry<String, MultiThreadPoolProperties.ThreadPoolProperties> entry
                 : multiThreadPoolProperties.getProperties().entrySet()) {
             String beanName = entry.getKey();
             MultiThreadPoolProperties.ThreadPoolProperties properties = entry.getValue();
-            ThreadPoolTaskExecutor executor = ManualRegistBeanUtil
-                    .registerBean((ConfigurableApplicationContext) applicationContext, beanName, ThreadPoolTaskExecutor.class);
-            initExecutorProperties(executor, properties);
-            threadPoolTaskExecutorCache.put(beanName, executor);
+
+            multiThreadPoolManager.createThreadPoolTaskExecutor((ConfigurableApplicationContext) applicationContext
+                    , beanName, properties, taskDecorator.getIfUnique());
         }
     }
 
-    private void initExecutorProperties(ThreadPoolTaskExecutor taskExecutor, MultiThreadPoolProperties.ThreadPoolProperties properties) {
-        PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
-        map.from(properties::getQueueCapacity).to(taskExecutor::setQueueCapacity);
-        map.from(properties::getCoreSize).to(taskExecutor::setCorePoolSize);
-        map.from(properties::getMaxSize).to(taskExecutor::setMaxPoolSize);
-        map.from(properties::getKeepAliveSeconds).asInt(Duration::getSeconds).to(taskExecutor::setKeepAliveSeconds);
-        map.from(properties::isAllowCoreThreadTimeout).to(taskExecutor::setAllowCoreThreadTimeOut);
-        map.from(properties::getBeanName).whenHasText().to(taskExecutor::setThreadNamePrefix);
-        map.from(taskDecorator::getIfUnique).to(taskExecutor::setTaskDecorator);
-        taskExecutor.initialize();
+
+    @Bean
+    @ConditionalOnMissingBean
+    public MultiThreadPoolManager multiThreadPoolManager() {
+        return new MultiThreadPoolManager();
     }
 }

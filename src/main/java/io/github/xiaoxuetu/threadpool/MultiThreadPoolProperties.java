@@ -16,8 +16,6 @@ public class MultiThreadPoolProperties {
      */
     public static final String DEFAULT_THREAD_POOL_NAME = "default";
 
-    public static final ThreadPoolProperties DEFAULT_THREAD_POOL_PROPERTIES = new ThreadPoolProperties();
-
     /**
      * 线程池配置集合
      */
@@ -27,7 +25,7 @@ public class MultiThreadPoolProperties {
      * 线程池配置类
      */
     @Data
-    public static class ThreadPoolProperties {
+    static class ThreadPoolProperties {
 
         /**
          * 线程池名称，同时会作为线程池对前缀
