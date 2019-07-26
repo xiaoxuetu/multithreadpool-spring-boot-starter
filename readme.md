@@ -4,7 +4,7 @@
 # 使用方法
 1. 引入 `multithreadpool-spring-boot-starter` （todo: 待发布到maven仓库）
 
-2. 在 `application.conf` 文件中按照以下格式进行配置:
+2. 在 `application.properties` 文件中按照以下格式进行配置:
     - 最简单的使用方式:
     ```properties
     # 线程池名称，同时会作为线程池对前缀，默认值: default
