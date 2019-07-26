@@ -19,15 +19,16 @@ public class MultiThreadPoolManager extends HashMap<String, ThreadPoolTaskExecut
 
     /**
      * 创建线程池
+     *
      * @param applicationContext 应用上下文
-     * @param beanName           线程池实例名称，同时也是线程池前缀
      * @param properties         线程池配置
      * @param taskDecorator      任务修饰器
      */
     public void createThreadPoolTaskExecutor(ConfigurableApplicationContext applicationContext,
-                                             String beanName,
                                              MultiThreadPoolProperties.ThreadPoolProperties properties,
                                              TaskDecorator taskDecorator) {
+        String beanName = properties.getBeanName();
+
         if (containsKey(beanName)) {
             log.info("Threadpool '{}' was exists...");
             return;
@@ -41,9 +42,10 @@ public class MultiThreadPoolManager extends HashMap<String, ThreadPoolTaskExecut
 
     /**
      * 调整线程池配置
-     * @param taskExecutor   线程池
-     * @param properties     线程池配置
-     * @param taskDecorator  任务修饰器
+     *
+     * @param taskExecutor  线程池
+     * @param properties    线程池配置
+     * @param taskDecorator 任务修饰器
      */
     private void initExecutorProperties(ThreadPoolTaskExecutor taskExecutor,
                                         MultiThreadPoolProperties.ThreadPoolProperties properties,

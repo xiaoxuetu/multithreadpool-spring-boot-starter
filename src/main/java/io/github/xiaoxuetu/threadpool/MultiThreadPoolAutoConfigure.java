@@ -45,6 +45,7 @@ public class MultiThreadPoolAutoConfigure {
 
     /**
      * 构造方法
+     *
      * @param multiThreadPoolProperties 线程池配置
      * @param applicationContext        应用上下文
      * @param taskDecorator             任务修饰器
@@ -54,29 +55,29 @@ public class MultiThreadPoolAutoConfigure {
                                         ObjectProvider<TaskDecorator> taskDecorator) {
         this.multiThreadPoolProperties = multiThreadPoolProperties;
         this.applicationContext = applicationContext;
-        this.taskDecorator = taskDecorator;;
+        this.taskDecorator = taskDecorator;
+        ;
     }
 
     /**
      * 初始化线程池
-     *
+     * <p>
      * 目前初始化时机是在该类初始化后
      */
     @PostConstruct
     public void init() {
-        for (Map.Entry<String, MultiThreadPoolProperties.ThreadPoolProperties> entry
-                : multiThreadPoolProperties.getProperties().entrySet()) {
-            String beanName = entry.getKey();
-            MultiThreadPoolProperties.ThreadPoolProperties properties = entry.getValue();
-
-            multiThreadPoolManager.createThreadPoolTaskExecutor((ConfigurableApplicationContext) applicationContext
-                    , beanName, properties, taskDecorator.getIfUnique());
+        for (MultiThreadPoolProperties.ThreadPoolProperties properties : multiThreadPoolProperties.getExecutors()) {
+            multiThreadPoolManager
+                    .createThreadPoolTaskExecutor((ConfigurableApplicationContext) applicationContext,
+                    properties, taskDecorator.getIfUnique());
         }
+
     }
 
 
     /**
      * 获取线程池管理器
+     *
      * @return 线程池管理器
      */
     @Bean

@@ -21,12 +21,11 @@ public class DemoApplication {
         // 获取线程池
         ThreadPoolTaskExecutor executor = context.getBean(DemoTask.TEST_THREAD_POOL_NAME, ThreadPoolTaskExecutor.class);
         // 输出线程池前缀
-        log.info(executor.getThreadNamePrefix());
         // 线程池前缀校验
         Assert.assertEquals("线程名不正确", DemoTask.TEST_THREAD_PREFIX, executor.getThreadNamePrefix());
         // 验证异步任务执行情况
         context.getBean(DemoTask.class).printTask();
-
+        log.info(executor.getThreadNamePrefix());
         log.info("finish");
     }
 

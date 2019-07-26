@@ -4,8 +4,8 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 线程池配置
@@ -22,7 +22,7 @@ public class MultiThreadPoolProperties {
     /**
      * 线程池配置集合
      */
-    private Map<String, ThreadPoolProperties> properties = new HashMap<>();
+    private List<ThreadPoolProperties> executors = new ArrayList<>();
 
     /**
      * 线程池配置类
