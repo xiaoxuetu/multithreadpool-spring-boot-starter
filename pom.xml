@@ -68,8 +68,8 @@
     <!--</scm>-->
 
     <scm>
-        <connection>scm:git:git://github.com:xiaoxuetu/multithreadpool-spring-boot-starter.git</connection>
-        <developerConnection>scm:git:ssh://github.com:xiaoxuetu/multithreadpool-spring-boot-starter.git</developerConnection>
+        <connection>scm:git:git@github.com:xiaoxuetu/multithreadpool-spring-boot-starter.git</connection>
+        <developerConnection>scm:git:git@github.com:xiaoxuetu/multithreadpool-spring-boot-starter.git</developerConnection>
         <url>http://github.com/xiaoxuetu/multithreadpool-spring-boot-starter/tree/master</url>
     </scm>
 
