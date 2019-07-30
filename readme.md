@@ -2,7 +2,14 @@
 通过 `multithreadpool-spring-boot-starter`，我们可以动态根据配置文件进行多个线程池的初始化。
 
 # 使用方法
-1. 引入 `multithreadpool-spring-boot-starter` （todo: 待发布到maven仓库）
+1. 引入 `multithreadpool-spring-boot-starter` 
+```xml
+<dependency>
+  <groupId>io.github.xiaoxuetu</groupId>
+  <artifactId>multithreadpool-spring-boot-starter</artifactId>
+  <version>0.0.1</version>
+</dependency>
+```
 
 2. 在 `application.properties` 文件中按照以下格式进行配置:
     - 最简单的使用方式:
